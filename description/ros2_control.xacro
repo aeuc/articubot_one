@@ -1,33 +1,44 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
+    <!-- Ensure sim_mode argument is passed from your top-level URDF or launch file -->
+    <xacro:arg name="sim_mode" default="true"/>
+
     <xacro:unless value="$(arg sim_mode)">
         <ros2_control name="RealRobot" type="system">
             <hardware>
                 <plugin>diffdrive_arduino/DiffDriveArduino</plugin>
-                <param name="left_wheel_name">left_wheel_joint</param>
-                <param name="right_wheel_name">right_wheel_joint</param>
+                <!-- For a 4-wheel real robot, you might need a different plugin or 
+                     to specify how multiple motors per side are handled.
+                     This example assumes the plugin can take a list or is adapted. -->
+                <param name="left_wheel_names">front_left_wheel_joint,rear_left_wheel_joint</param>
+                <param name="right_wheel_names">front_right_wheel_joint,rear_right_wheel_joint</param>
                 <param name="loop_rate">30</param>
                 <param name="device">/dev/ttyUSB0</param>
                 <param name="baud_rate">57600</param>
                 <param name="timeout">1000</param>
-                <param name="enc_counts_per_rev">3436</param>
+                <param name="enc_counts_per_rev">3436</param> <!-- Per motor -->
             </hardware>
-            <joint name="left_wheel_joint">
-                <command_interface name="velocity">
-                    <param name="min">-10</param>
-                    <param name="max">10</param>
-                </command_interface>
-                <state_interface name="velocity"/>
-                <state_interface name="position"/>
+            <!-- Define command/state interfaces for all 4 wheels -->
+            <joint name="front_left_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
             </joint>
-            <joint name="right_wheel_joint">
-                <command_interface name="velocity">
-                    <param name="min">-10</param>
-                    <param name="max">10</param>
-                </command_interface>
-                <state_interface name="velocity"/>
-                <state_interface name="position"/>
+            <joint name="rear_left_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
+            <joint name="front_right_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
+            <joint name="rear_right_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
+            <joint name="kinect_tilt_joint">
+                <command_interface name="position"><param name="min">-1.57</param><param name="max">1.57</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
             </joint>
         </ros2_control>
     </xacro:unless>
@@ -37,21 +48,25 @@
             <hardware>
                 <plugin>gazebo_ros2_control/GazeboSystem</plugin>
             </hardware>
-            <joint name="left_wheel_joint">
-                <command_interface name="velocity">
-                    <param name="min">-10</param>
-                    <param name="max">10</param>
-                </command_interface>
-                <state_interface name="velocity"/>
-                <state_interface name="position"/>
+            <joint name="front_left_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
             </joint>
-            <joint name="right_wheel_joint">
-                <command_interface name="velocity">
-                    <param name="min">-10</param>
-                    <param name="max">10</param>
-                </command_interface>
-                <state_interface name="velocity"/>
-                <state_interface name="position"/>
+            <joint name="rear_left_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
+            <joint name="front_right_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
+            <joint name="rear_right_wheel_joint">
+                <command_interface name="velocity"><param name="min">-10</param><param name="max">10</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
+            <joint name="kinect_tilt_joint">
+                <command_interface name="position"><param name="min">-1.57</param><param name="max">1.57</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
             </joint>
         </ros2_control>
     </xacro:if>

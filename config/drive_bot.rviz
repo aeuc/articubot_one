@@ -50,15 +50,17 @@ Visualization Manager:
         All Enabled: true
         base_link:
           Value: true
-        caster_wheel:
-          Value: true
         chassis:
           Value: true
-        left_wheel:
+        front_left_wheel:
+          Value: true
+        front_right_wheel:
           Value: true
         odom:
           Value: true
-        right_wheel:
+        rear_left_wheel:
+          Value: true
+        rear_right_wheel:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -69,11 +71,14 @@ Visualization Manager:
         odom:
           base_link:
             chassis:
-              caster_wheel:
-                {}
-            left_wheel:
               {}
-            right_wheel:
+            front_left_wheel:
+              {}
+            front_right_wheel:
+              {}
+            rear_left_wheel:
+              {}
+            rear_right_wheel:
               {}
       Update Interval: 0
       Value: true
@@ -99,26 +104,28 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        caster_wheel:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         chassis:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        left_wheel:
+        front_left_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_wheel:
+        front_right_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-          Value: true
+        rear_left_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        rear_right_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
       Name: RobotModel
       TF Prefix: ""
       Update Interval: 0

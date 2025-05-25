@@ -52,19 +52,21 @@ Visualization Manager:
           Value: true
         camera_link_optical:
           Value: true
-        caster_wheel:
-          Value: true
         chassis:
           Value: true
         face_link:
           Value: true
         laser_frame:
           Value: true
-        left_wheel:
+        front_left_wheel:
+          Value: true
+        front_right_wheel:
           Value: true
         odom:
           Value: true
-        right_wheel:
+        rear_left_wheel:
+          Value: true
+        rear_right_wheel:
           Value: true
       Marker Scale: 1
       Name: TF
@@ -78,15 +80,17 @@ Visualization Manager:
               camera_link:
                 camera_link_optical:
                   {}
-              caster_wheel:
-                {}
               face_link:
                 {}
               laser_frame:
                 {}
-            left_wheel:
+            front_left_wheel:
               {}
-            right_wheel:
+            front_right_wheel:
+              {}
+            rear_left_wheel:
+              {}
+            rear_right_wheel:
               {}
       Update Interval: 0
       Value: true
@@ -121,11 +125,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        caster_wheel:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         chassis:
           Alpha: 1
           Show Axes: false
@@ -141,12 +140,22 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
-        left_wheel:
+        front_left_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
           Value: true
-        right_wheel:
+        front_right_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_left_wheel:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        rear_right_wheel:
           Alpha: 1
           Show Axes: false
           Show Trail: false
