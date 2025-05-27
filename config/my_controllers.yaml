@@ -12,6 +12,9 @@ controller_manager:
     kinect_tilt_controller:
       type: position_controllers/JointGroupPositionController
 
+    kinect_pan_controller:
+      type: position_controllers/JointGroupPositionController
+
 diff_cont:
   ros__parameters:
 
@@ -30,3 +33,8 @@ kinect_tilt_controller:
   ros__parameters:
     joints: 
      - kinect_tilt_joint
+
+kinect_pan_controller:
+  ros__parameters:
+    joints: 
+     - kinect_pan_joint

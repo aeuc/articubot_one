@@ -25,20 +25,20 @@ def generate_launch_description():
         remappings=[('cloud_in', '/kinect/kinect_depth/points'), # Input PointCloud2 topic
                     ('scan', '/scan')],                   # Output LaserScan topic
         parameters=[{
-            'target_frame': 'kinect_depth_sensor_link', # Or 'kinect_depth_sensor_optical_link' or 'base_link'
+            'target_frame': 'base_footprint', # Or 'kinect_depth_sensor_optical_link' or 'base_link'
                                                         # This is the frame in which the scan will be generated.
                                                         # Usually the frame of the sensor or a frame aligned with robot base.
-            'transform_tolerance': 0.03,    # Time (s) to wait for transform to target_frame
-            'min_height': -0.10,            # Minimum Z height of points to consider (relative to target_frame)
-            'max_height': 0.10,             # Maximum Z height of points to consider (relative to target_frame)
+            'transform_tolerance': 0.1,    # Time (s) to wait for transform to target_frame
+            'min_height': 0.05,            # Minimum Z height of points to consider (relative to target_frame)
+            'max_height': 0.40,             # Maximum Z height of points to consider (relative to target_frame)
                                             # This creates a 20cm thick horizontal slice. Adjust as needed.
-            'angle_min': -math.pi / 2.0,    # Start angle of the scan (rad), e.g., -90 degrees
-            'angle_max': math.pi / 2.0,     # End angle of the scan (rad), e.g., +90 degrees
+            'angle_min': -1.089/2.0,    # Start angle of the scan (rad), e.g., -90 degrees
+            'angle_max': 1.089/2.0,     # End angle of the scan (rad), e.g., +90 degrees
                                             # This gives a 180-degree forward-facing scan.
-            'angle_increment': math.pi / 360.0, # Angular resolution (rad), e.g., 0.5 degree increments
+            'angle_increment': 1.089/2.0 / 360.0, # Angular resolution (rad), e.g., 0.5 degree increments
             'scan_time': 0.1,               # Time between scans (s), 1/update_rate
             'range_min': 0.20,              # Minimum range of the generated scan (m)
-            'range_max': 5.0,               # Maximum range of the generated scan (m)
+            'range_max': 4.0,               # Maximum range of the generated scan (m)
             'use_inf': True,                # Whether to use +/- INF for out-of-range points
             'inf_epsilon': 1.0,
             # 'concurrency_level': 1,       # Number of threads to use

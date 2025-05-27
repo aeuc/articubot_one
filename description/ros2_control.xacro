@@ -40,6 +40,10 @@
                 <command_interface name="position"><param name="min">-1.57</param><param name="max">1.57</param></command_interface>
                 <state_interface name="velocity"/><state_interface name="position"/>
             </joint>
+            <joint name="kinect_pan_joint">
+                <command_interface name="position"><param name="min">-1.57</param><param name="max">1.57</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
         </ros2_control>
     </xacro:unless>
 
@@ -65,6 +69,10 @@
                 <state_interface name="velocity"/><state_interface name="position"/>
             </joint>
             <joint name="kinect_tilt_joint">
+                <command_interface name="position"><param name="min">-1.57</param><param name="max">1.57</param></command_interface>
+                <state_interface name="velocity"/><state_interface name="position"/>
+            </joint>
+            <joint name="kinect_pan_joint">
                 <command_interface name="position"><param name="min">-1.57</param><param name="max">1.57</param></command_interface>
                 <state_interface name="velocity"/><state_interface name="position"/>
             </joint>

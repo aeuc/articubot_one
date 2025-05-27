@@ -1,162 +1,165 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro">
 
-    <xacro:property name="kinect_base_width" value="0.09"/> 
-    <xacro:property name="kinect_base_length" value="0.07"/> 
-    <xacro:property name="kinect_base_height" value="0.03"/> 
-    <xacro:property name="kinect_base_mass" value="0.2"/>  
+    <xacro:property name="kinect_base_width" value="0.09"/>
+    <xacro:property name="kinect_base_length" value="0.07"/>
+    <xacro:property name="kinect_base_height" value="0.03"/>
+    <xacro:property name="kinect_base_mass" value="0.2"/>
 
-    <xacro:property name="kinect_head_width" value="0.28"/> 
+    <xacro:property name="kinect_head_width" value="0.28"/>
     <xacro:property name="kinect_head_length" value="0.065"/>
     <xacro:property name="kinect_head_height" value="0.035"/>
-    <xacro:property name="kinect_head_mass" value="0.05"/>  
+    <xacro:property name="kinect_head_mass" value="0.05"/>
 
-    <xacro:property name="kinect_mount_x" value="0.0"/>    
-    <xacro:property name="kinect_mount_y" value="0.0"/>    
-    <xacro:property name="kinect_mount_z" value="0.02"/>   
-    <xacro:property name="kinect_mount_roll" value="0.0"/>
-    <xacro:property name="kinect_mount_pitch" value="0.0"/>
-    <xacro:property name="kinect_mount_yaw" value="0.0"/>
+    <xacro:property name="kinect_assembly_mount_x" value="0.0"/>
+    <xacro:property name="kinect_assembly_mount_y" value="0.0"/>
+    <xacro:property name="kinect_assembly_mount_z" value="${chassis_height/2 + 0.01}"/> 
+    <xacro:property name="kinect_assembly_mount_roll" value="0.0"/>
+    <xacro:property name="kinect_assembly_mount_pitch" value="0.0"/>
+    <xacro:property name="kinect_assembly_mount_yaw" value="0.0"/>
+
+    <xacro:property name="tilt_joint_lower_limit" value="${-pi/4}"/>
+    <xacro:property name="tilt_joint_upper_limit" value="${pi/6}"/>
+    <xacro:property name="tilt_joint_velocity_limit" value="1.0"/>
+    <xacro:property name="tilt_joint_effort_limit" value="10.0"/>
+
+    <xacro:property name="pan_joint_lower_limit" value="${-pi/2}"/> 
+    <xacro:property name="pan_joint_upper_limit" value="${pi/2}"/>
+    <xacro:property name="pan_joint_velocity_limit" value="1.0"/>  
+    <xacro:property name="pan_joint_effort_limit" value="10.0"/>   
+
+    <xacro:property name="kinect_pan_base_radius" value="0.04"/> 
+    <xacro:property name="kinect_pan_base_height" value="0.015"/> 
+    <xacro:property name="kinect_pan_base_mass" value="0.1"/>  
 
 
-    <xacro:property name="tilt_joint_lower_limit" value="${-pi/4}"/> 
-    <xacro:property name="tilt_joint_upper_limit" value="${pi/6}"/> 
-    <xacro:property name="tilt_joint_velocity_limit" value="1.0"/> 
-    <xacro:property name="tilt_joint_effort_limit" value="10.0"/> 
+    <joint name="kinect_pan_joint" type="revolute">
+        <parent link="chassis"/>
+        <child link="kinect_pan_base_link"/>
+        <origin xyz="${kinect_assembly_mount_x} ${kinect_assembly_mount_y} ${kinect_assembly_mount_z}"
+                rpy="${kinect_assembly_mount_roll} ${kinect_assembly_mount_pitch} ${kinect_assembly_mount_yaw}"/>
+        <axis xyz="0 0 1"/>
+        <limit lower="${pan_joint_lower_limit}" upper="${pan_joint_upper_limit}"
+               effort="${pan_joint_effort_limit}" velocity="${pan_joint_velocity_limit}"/>
+        <dynamics damping="0.1" friction="0.1"/>
+    </joint>
+
+    <link name="kinect_pan_base_link">
+        <visual>
+            <origin xyz="0 0 ${kinect_pan_base_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${kinect_pan_base_radius}" length="${kinect_pan_base_height}"/>
+            </geometry>
+            <material name="medium_grey">
+                 <color rgba="0.5 0.5 0.5 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 ${kinect_pan_base_height/2}" rpy="0 0 0"/>
+            <geometry>
+                <cylinder radius="${kinect_pan_base_radius}" length="${kinect_pan_base_height}"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="${kinect_pan_base_mass}"
+                                 radius="${kinect_pan_base_radius}" length="${kinect_pan_base_height}">
+            <origin xyz="0 0 ${kinect_pan_base_height/2}" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+    </link>
+    <gazebo reference="kinect_pan_base_link">
+        <material>Gazebo/Grey</material> 
+    </gazebo>
 
 
     <joint name="kinect_base_mount_joint" type="fixed">
-        <parent link="chassis"/>
+        <parent link="kinect_pan_base_link"/> 
         <child link="kinect_base_link"/>
-        <origin xyz="${kinect_mount_x} ${kinect_mount_y} ${kinect_mount_z}" 
-                rpy="${kinect_mount_roll} ${kinect_mount_pitch} ${kinect_mount_yaw}"/>
+        <origin xyz="0 0 ${kinect_pan_base_height}" rpy="0 0 0"/>
     </joint>
 
     <link name="kinect_base_link">
         <visual>
             <origin xyz="0 0 ${kinect_base_height/2}" rpy="0 0 0"/>
-            <geometry>
-                <box size="${kinect_base_length} ${kinect_base_width} ${kinect_base_height}"/>
-            </geometry>
+            <geometry> <box size="${kinect_base_length} ${kinect_base_width} ${kinect_base_height}"/> </geometry>
             <material name="black"/>
         </visual>
         <collision>
             <origin xyz="0 0 ${kinect_base_height/2}" rpy="0 0 0"/>
-            <geometry>
-                <box size="${kinect_base_length} ${kinect_base_width} ${kinect_base_height}"/>
-            </geometry>
+            <geometry> <box size="${kinect_base_length} ${kinect_base_width} ${kinect_base_height}"/> </geometry>
         </collision>
-        <xacro:inertial_box mass="${kinect_base_mass}" 
+        <xacro:inertial_box mass="${kinect_base_mass}"
                             x="${kinect_base_length}" y="${kinect_base_width}" z="${kinect_base_height}">
             <origin xyz="0 0 ${kinect_base_height/2}" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
-    <gazebo reference="kinect_base_link">
-        <material>Gazebo/Black</material>
-    </gazebo>
+    <gazebo reference="kinect_base_link"> <material>Gazebo/Black</material> </gazebo>
 
 
     <joint name="kinect_tilt_joint" type="revolute">
         <parent link="kinect_base_link"/>
         <child link="kinect_tilt_head_link"/>
-
         <origin xyz="0 0 ${kinect_base_height}" rpy="0 0 0"/>
         <axis xyz="0 1 0"/>
         <limit lower="${tilt_joint_lower_limit}" upper="${tilt_joint_upper_limit}"
                effort="${tilt_joint_effort_limit}" velocity="${tilt_joint_velocity_limit}"/>
-        <dynamics damping="0.1" friction="0.1"/> 
+        <dynamics damping="0.1" friction="0.1"/>
     </joint>
 
     <link name="kinect_tilt_head_link">
         <visual>
-
             <origin xyz="${kinect_head_length/2} 0 ${kinect_head_height/2}" rpy="0 0 0"/>
-            <geometry>
-                <box size="${kinect_head_length} ${kinect_head_width} ${kinect_head_height}"/>
-            </geometry>
-            <material name="dark_grey">
-                <color rgba="0.3 0.3 0.3 1"/>
-            </material>
+            <geometry> <box size="${kinect_head_length} ${kinect_head_width} ${kinect_head_height}"/> </geometry>
+            <material name="dark_grey"><color rgba="0.3 0.3 0.3 1"/></material>
         </visual>
         <collision>
             <origin xyz="${kinect_head_length/2} 0 ${kinect_head_height/2}" rpy="0 0 0"/>
-            <geometry>
-                <box size="${kinect_head_length} ${kinect_head_width} ${kinect_head_height}"/>
-            </geometry>
+            <geometry> <box size="${kinect_head_length} ${kinect_head_width} ${kinect_head_height}"/> </geometry>
         </collision>
         <xacro:inertial_box mass="${kinect_head_mass}"
                             x="${kinect_head_length}" y="${kinect_head_width}" z="${kinect_head_height}">
             <origin xyz="${kinect_head_length/2} 0 ${kinect_head_height/2}" rpy="0 0 0"/>
         </xacro:inertial_box>
     </link>
-    <gazebo reference="kinect_tilt_head_link">
-        <material>Gazebo/DarkGrey</material>
-    </gazebo>
-
+    <gazebo reference="kinect_tilt_head_link"> <material>Gazebo/DarkGrey</material> </gazebo>
 
 
     <joint name="kinect_depth_sensor_joint" type="fixed">
         <parent link="kinect_tilt_head_link"/>
         <child link="kinect_depth_sensor_link"/>
-
-        <origin xyz="${kinect_head_length} 0 ${kinect_head_height/2}" rpy="0 0 0"/>
+        <origin xyz="${kinect_head_length/2} 0 ${kinect_head_height/2}" rpy="0 0 0"/> 
     </joint>
-
     <link name="kinect_depth_sensor_link">
-
-        <visual>
-            <geometry><sphere radius="0.005"/></geometry>
-            <material name="blue"/>
-        </visual>
+        <visual> <geometry><sphere radius="0.005"/></geometry> <material name="blue"/> </visual>
     </link>
-
-
 
     <joint name="kinect_depth_sensor_optical_joint" type="fixed">
         <parent link="kinect_depth_sensor_link"/>
         <child link="kinect_depth_sensor_optical_link"/>
-        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/> 
+        <origin xyz="0 0 0" rpy="${-pi/2} 0 ${-pi/2}"/>
     </joint>
-
     <link name="kinect_depth_sensor_optical_link"/>
 
-
-
     <gazebo reference="kinect_depth_sensor_link">
-        <sensor name="kinect_depth_camera" type="depth"> 
+        <sensor name="kinect_depth_camera" type="depth">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>true</visualize>
             <update_rate>10</update_rate>
-            <camera name="kinect_camera_sensor_name"> 
+            <camera name="kinect_camera_sensor_name">
                 <horizontal_fov>1.089</horizontal_fov>
-                <image>
-                    <format>B8G8R8</format> 
-                    <width>640</width>
-                    <height>480</height>
-                </image>
-                <clip>
-                    <near>0.05</near>
-                    <far>8.0</far> 
-                </clip>
-                <depth_camera>
-                  
-                </depth_camera>
+                <image> <format>B8G8R8</format> <width>640</width> <height>480</height> </image>
+                <clip> <near>0.05</near> <far>8.0</far> </clip>
             </camera>
             <plugin name="kinect_depth_camera_controller" filename="libgazebo_ros_camera.so">
                 <ros>
                     <namespace>/kinect</namespace>
-                    <remapping>image_raw:=depth/image_raw</remapping>
+                    <remapping>image_raw:=depth/image_raw</remapping> 
                     <remapping>camera_info:=depth/camera_info</remapping>
-                    <remapping>points:=depth/points</remapping> 
+                    <remapping>points:=depth/points</remapping>
                 </ros>
-                <camera_name>kinect_depth</camera_name> 
-                <frame_name>kinect_depth_sensor_optical_link</frame_name> 
-                <hack_baseline>0.0</hack_baseline>
+                <camera_name>kinect_depth</camera_name>
+                <frame_name>kinect_depth_sensor_optical_link</frame_name>
                 <min_depth>0.1</min_depth>
-                <max_depth>10.0</max_depth> 
-     
+                <max_depth>10.0</max_depth>
             </plugin>
         </sensor>
     </gazebo>
-
 </robot>
